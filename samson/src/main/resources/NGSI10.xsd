@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" >
+
+	<xs:element name="notifyContextRequest" type="notifyContext" />
+	<xs:element name="subscribeContextRequest" type="subscribeContext" />
+	
+	<xs:element name="queryContextRequest" type="queryContextRequest" />
+	<xs:element name="queryContextResponse" type="contextResponse" />
+	
+	<xs:element name="registerContextRequest" type="registerContextRequest" />
+	<xs:element name="registerContextResponse" type="registerContextResponse" />
+	
+	<xs:element name="updateContextRequest" type="updateContextRequest" />
+	<xs:element name="updateContextResponse" type="contextResponse" />
+
+	<!-- Type Definition -->
+	<xs:complexType name="notifyContext">
+		<xs:sequence>
+			<xs:element name="subscriptionId" type="xs:string"/>
+			<xs:element name="originator" type="xs:anyURI"/>
+			<xs:element name="contextResponseList" type="contextResponseList"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="registerContextResponse">
+		<xs:sequence>
+			<xs:element name="duration" type="xs:duration"/>
+			<xs:element name="registrationId" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="registerContextRequest">
+		<xs:sequence>
+			<xs:element name="contextRegistrationList" type="contextRegistrationList"/>
+			<xs:element name="duration" type="xs:duration"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="contextRegistrationList">
+		<xs:sequence>
+			<xs:element name="contextRegistration" type="contextRegistration" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="contextRegistration">
+		<xs:sequence>
+			<xs:element name="entityIdList" type="entityIdList"/>
+			<xs:element name="contextRegistrationAttributeList" type="contextRegistrationAttributeList"/>
+			<xs:element name="providingApplication" type="xs:anyURI"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="contextRegistrationAttributeList">
+		<xs:sequence>
+			<xs:element name="contextRegistrationAttribute" type="contextRegistrationAttribute" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="contextRegistrationAttribute">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="isDomain" type="xs:boolean"/>
+			<xs:element name="type" type="xs:anyURI"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="updateContextRequest">
+		<xs:sequence>
+			<xs:element name="contextElementList" type="contextElementList"/>
+			<xs:element name="updateAction" type="updateActionType"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="contextElementList">
+		<xs:sequence>
+			<xs:element name="contextElement" type="contextElement" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="contextResponse">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element name="contextResponseList" type="contextResponseList"/>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element name="errorCode" type="statusCode"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="contextResponseList">
+		<xs:sequence>
+			<xs:element name="contextElementResponse" type="contextElementResponse" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="contextElementResponse">
+		<xs:sequence>
+			<xs:element name="contextElement" type="contextElement" minOccurs="0"/>
+			<xs:element name="statusCode" type="statusCode" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="contextElement">
+		<xs:sequence>
+			<xs:element name="entityId" type="entityId" minOccurs="0"/>
+			<xs:element name="attributeDomainName" type="xs:string" minOccurs="0"/>
+			<xs:element name="contextAttributeList" type="contextAttributeList" nillable="true" />
+			<xs:element name="domainMetadata" type="contextMetadata" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="contextAttributeList">
+		<xs:sequence>
+			<xs:element name="contextAttribute" type="contextAttribute" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="contextAttribute">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="type" type="xs:anyURI"/>
+			<xs:element name="contextValue" type="xs:anyType" minOccurs="0"/>
+			<xs:element name="metadata" type="contextMetadata" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+
+	</xs:complexType>
+	<xs:complexType name="contextMetadata">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" minOccurs="0"/>
+			<xs:element name="type" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="value" type="xs:anyType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="entityIdList">
+		<xs:sequence>
+			<xs:element name="entityId" type="entityId" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="entityId">
+		<xs:sequence>
+			<xs:element name="id" type="xs:string"/>
+		</xs:sequence>
+		<xs:attribute name="type" type="xs:string" use="optional"/>
+		<xs:attribute name="isPattern" type="xs:boolean" use="optional"/>
+	</xs:complexType>
+
+	<xs:complexType name="statusCode">
+		<xs:sequence>
+			<xs:element name="code" type="xs:int"/>
+			<xs:element name="reasonPhrase" type="xs:string" minOccurs="0"/>
+			<xs:element name="details" type="xs:anyType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="subscribeContext">
+		<xs:sequence>
+			<xs:element name="entityIdList" type="entityIdList"/>
+			<xs:element name="attributeList" type="attributeList"/>
+			<xs:element name="reference" type="xs:anyURI"/>
+			<xs:element name="duration" type="xs:duration"/>
+			<xs:element name="notifyConditions" type="NotifyConditionList"/>
+			<xs:element name="throttling" type="xs:duration" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="queryContextRequest">
+		<xs:sequence>
+			<xs:element name="entityIdList" type="entityIdList"/>
+			<xs:element name="attributeList" type="attributeList"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="attributeList">
+		<xs:sequence>
+			<xs:element name="attribute" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="NotifyConditionList">
+		<xs:sequence>
+			<xs:element name="notifyCondition" type="NotifyCondition" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="NotifyCondition">
+		<xs:sequence>
+			<xs:element name="type" type="NotifyConditionType" minOccurs="1" maxOccurs="1" />
+			<xs:element name="condValueList" type="CondValueList" minOccurs="0" maxOccurs="1" />
+			<xs:element name="restriction" type="xs:string" minOccurs="0" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:simpleType name="updateActionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="APPEND" />
+			<xs:enumeration value="DELETE" />
+			<xs:enumeration value="UPDATE" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="NotifyConditionType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ONTIMEINTERVAL" />
+			<xs:enumeration value="ONVALUE" />
+			<xs:enumeration value="ONCHANGE" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="CondValueList">
+		<xs:sequence>
+			<xs:element name="condValue" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

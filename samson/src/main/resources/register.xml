@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registerContextRequest>
+	<contextRegistrationList>
+		<contextRegistration>
+			<entityIdList>
+				<entityId type="Issue" isPattern="false">
+					<id>iss10</id>
+				</entityId>
+			</entityIdList>
+			<contextRegistrationAttributeList>
+				<contextRegistrationAttribute>
+					<name>attr</name>
+					<isDomain>false</isDomain>
+					<type>tipo</type>
+				</contextRegistrationAttribute>
+			</contextRegistrationAttributeList>
+			<providingApplication>http://wirecloud.conwet.fi.upm.es</providingApplication>
+		</contextRegistration>
+	</contextRegistrationList>
+	<duration>PT24H</duration>
+</registerContextRequest>

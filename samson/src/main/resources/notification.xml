@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<notifyContextRequest>
+	<subscriptionId>SUB_1352391211T015</subscriptionId>
+	<originator>127.0.0.1</originator>
+	<contextResponseList>
+		<contextElementResponse>
+			<contextElement>
+				<entityId type="VendingMachine" isPattern="false">
+					<id>vm8</id>
+				</entityId>
+				<attributeDomainName></attributeDomainName>
+				<contextAttributeList>
+					<contextAttribute>
+						<name>milk_level</name>
+						<type>percentage</type>
+						<contextValue>56</contextValue>
+						<metadata>
+						</metadata>
+					</contextAttribute>
+
+					<contextAttribute>
+						<name>coffe_level</name>
+						<type>percentage</type>
+						<contextValue>12.66</contextValue>
+						<metadata>
+							<name>NNN</name>
+							<type>TYYPEE</type>
+							<value>DDDD</value>
+						</metadata>
+					</contextAttribute>
+
+				</contextAttributeList>
+				<domainMetadata>
+				</domainMetadata>
+			</contextElement>
+			<statusCode>
+				<code>200</code>
+				<reasonPhrase>ok</reasonPhrase>
+				<details>ok</details>
+			</statusCode>
+		</contextElementResponse>
+	</contextResponseList>
+</notifyContextRequest>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updateContextRequest>
+	<contextElementList>
+		<contextElement>
+			<entityId type="Issue" isPattern="false">
+				<id>iss10</id>
+			</entityId>
+			<contextAttributeList>
+				<contextAttribute>
+					<name>severity</name>
+					<contextValue>warning</contextValue>
+				</contextAttribute>
+				<contextAttribute>
+					<name>issueType</name>
+					<contextValue>Out of coffee</contextValue>
+				</contextAttribute>
+				<contextAttribute>
+					<name>vmId</name>
+					<contextValue>VM-9218-147</contextValue>
+				</contextAttribute>
+				<contextAttribute>
+					<name>imageFile</name>
+					<contextValue/>
+				</contextAttribute>
+				<contextAttribute>
+					<name>imageURL</name>
+					<contextValue/>
+				</contextAttribute>
+				<contextAttribute>
+					<name>technician</name>
+					<contextValue/>
+				</contextAttribute>
+				<contextAttribute>
+					<name>description</name>
+					<contextValue>Coffee tank is almost empty.</contextValue>
+				</contextAttribute>
+				<contextAttribute>
+					<name>coordinates</name>
+					<contextValue>50.842445, 4.345650</contextValue>
+				</contextAttribute>
+			</contextAttributeList>
+		</contextElement>
+	</contextElementList>
+	<updateAction>APPEND</updateAction>
+</updateContextRequest>

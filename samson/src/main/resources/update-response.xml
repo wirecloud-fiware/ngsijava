@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updateContextResponse>
+	<contextResponseList>
+		<contextElementResponse>
+			<contextElement>
+				<entityId type="Van" isPattern="false">
+					<id>van4</id>
+				</entityId>
+				<attributeDomainName></attributeDomainName>
+				<contextAttributeList>
+					<contextAttribute>
+						<name>current_position</name>
+						<type></type>
+						<contextValue>50.8482500, 4.3406800</contextValue>
+						<metadata>
+						</metadata>
+					</contextAttribute>
+				</contextAttributeList>
+				<domainMetadataList>
+				</domainMetadataList>
+			</contextElement>
+			<statusCode>
+				<code>200</code>
+				<reasonPhrase>ok</reasonPhrase>
+				<details>ok</details>
+			</statusCode>
+		</contextElementResponse>
+	</contextResponseList>
+</updateContextResponse>
