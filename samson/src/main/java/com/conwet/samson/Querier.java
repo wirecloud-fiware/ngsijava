@@ -16,6 +16,7 @@ import com.conwet.samson.jaxb.ContextRegistrationList;
 import com.conwet.samson.jaxb.ContextResponse;
 import com.conwet.samson.jaxb.EntityId;
 import com.conwet.samson.jaxb.EntityIdList;
+import com.conwet.samson.jaxb.ObjectFactory;
 import com.conwet.samson.jaxb.QueryContextRequest;
 import com.conwet.samson.jaxb.RegisterContextRequest;
 import com.conwet.samson.jaxb.RegisterContextResponse;
@@ -35,6 +36,7 @@ public class Querier implements QueryBroker {
 	private static final String UPDATE = "/ngsi10/updateContext";
 	
 	private String url;
+	private ObjectFactory factory;
 	
 	/**
 	 * Construct a {@linkplain Querier} object to query the context broker
@@ -43,7 +45,7 @@ public class Querier implements QueryBroker {
 	 * @param host the hostname where the context broker is running
 	 * @param port the port used by the context broker, must be greater than zero
 	 */
-	public Querier(String host, int port) {
+	Querier(String host, int port) {
 		
 		Objects.requireNonNull(host, "Hostname is null");
 		
@@ -53,12 +55,13 @@ public class Querier implements QueryBroker {
 		}
 		
 		this.url = "http://" + host + ":" + port;
+		this.factory = new ObjectFactory();
 	}
 	
 	@Override
 	public EntityId newEntityId(String type, String id) {
 		
-		EntityId entityID = new EntityId();
+		EntityId entityID = factory.createEntityId();
 		entityID.setType(type);
 		entityID.setId(id);
 		entityID.setIsPattern(Boolean.FALSE);
@@ -69,7 +72,7 @@ public class Querier implements QueryBroker {
 	@Override
 	public ContextResponse queryContext(EntityId entityId) throws Exception {
 		
-		EntityIdList list = new EntityIdList();
+		EntityIdList list = factory.createEntityIdList();
 		list.getEntityId().add(entityId);
 		
 		QueryContextRequest request = new QueryContextRequest();
@@ -81,10 +84,10 @@ public class Querier implements QueryBroker {
 	@Override
 	public RegisterContextResponse registerContext(ContextRegistration cxtReg, Duration duration) throws Exception {
 		
-		ContextRegistrationList list = new ContextRegistrationList();
+		ContextRegistrationList list = factory.createContextRegistrationList();
 		list.getContextRegistration().add(cxtReg);
 		
-		RegisterContextRequest request = new RegisterContextRequest();
+		RegisterContextRequest request = factory.createRegisterContextRequest();
 		request.setContextRegistrationList(list);
 		request.setDuration(duration);
 		
@@ -94,10 +97,10 @@ public class Querier implements QueryBroker {
 	@Override
 	public ContextResponse updateContext(ContextElement cxtElem, UpdateActionType action) throws Exception {
 		
-		ContextElementList list = new ContextElementList();
+		ContextElementList list = factory.createContextElementList();
 		list.getContextElement().add(cxtElem);
 		
-		UpdateContextRequest request = new UpdateContextRequest();
+		UpdateContextRequest request = factory.createUpdateContextRequest();
 		request.setContextElementList(list);
 		request.setUpdateAction(action);
 		
