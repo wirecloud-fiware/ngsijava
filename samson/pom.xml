@@ -89,6 +89,20 @@
 				<version>0.8.3</version>
 				<configuration>
 					<generatePackage>com.conwet.samson.jaxb</generatePackage>
+					<extension>true</extension>
+					<args>
+						<arg>-XtoString</arg>
+						<arg>-Xequals</arg>
+						<arg>-XhashCode</arg>
+						<arg>-Xcopyable</arg>
+					</args>
+					<plugins>
+						<plugin>
+							<groupId>org.jvnet.jaxb2_commons</groupId>
+							<artifactId>jaxb2-basics</artifactId>
+							<version>${jaxb-basic.version}</version>
+						</plugin>
+					</plugins>
 				</configuration>
 				<executions>
 					<execution>
@@ -222,6 +236,14 @@
 	</build>
 
 	<dependencies>
+		<!-- JAXB dependency for special method generation -->
+		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-basics-runtime</artifactId>
+			<version>${jaxb-basic.version}</version>
+		</dependency>
+		
+		<!-- REST library -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
@@ -259,5 +281,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<surefire-failsafe.version>2.14</surefire-failsafe.version>
+		<jaxb-basic.version>0.6.4</jaxb-basic.version>
 	</properties>
 </project>
