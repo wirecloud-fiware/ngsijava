@@ -169,6 +169,9 @@
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>findbugs-maven-plugin</artifactId>
 							<version>2.5.2</version>
+							<configuration>
+								<onlyAnalyze>com.conwet.samson.*</onlyAnalyze>
+							</configuration>
 						</plugin>
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
@@ -207,6 +210,9 @@
 					<targetTests>
 						<param>com.conwet.*</param>
 					</targetTests>
+					<excludedClasses>
+						<param>com.conwet.samson.jaxb.*</param>
+					</excludedClasses>
 				</configuration>
 			</plugin>
 

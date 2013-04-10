@@ -24,8 +24,10 @@ import org.junit.Test;
 import com.conwet.samson.jaxb.ContextElement;
 import com.conwet.samson.jaxb.ContextElementResponse;
 import com.conwet.samson.jaxb.ContextRegistration;
+import com.conwet.samson.jaxb.ContextResponse;
 import com.conwet.samson.jaxb.EntityId;
 import com.conwet.samson.jaxb.RegisterContextRequest;
+import com.conwet.samson.jaxb.RegisterContextResponse;
 import com.conwet.samson.jaxb.UpdateContextRequest;
 
 /**
@@ -163,7 +165,8 @@ public class QuerierTest {
 		ContextRegistration cxtReg = regCxtReq.getContextRegistrationList()
 											.getContextRegistration().get(0);
 		
-		instance.registerContext(cxtReg, regCxtReq.getDuration());
+		RegisterContextResponse resp = instance.registerContext(cxtReg, regCxtReq.getDuration());
+		assertThat(resp).isNotNull();
 		
 		checkServerRequest("/ngsi9/registerContext");
 	}
@@ -177,7 +180,8 @@ public class QuerierTest {
 		ContextElement cxtElem = upCxtReq.getContextElementList()
 										.getContextElement().get(0);
 		
-		instance.updateContext(cxtElem, upCxtReq.getUpdateAction());
+		ContextResponse resp = instance.updateContext(cxtElem, upCxtReq.getUpdateAction());
+		assertThat(resp).isNotNull();
 		
 		checkServerRequest("/ngsi10/updateContext");		
 	}
