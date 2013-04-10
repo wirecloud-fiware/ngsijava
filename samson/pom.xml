@@ -181,6 +181,9 @@
 							<version>3.0.1</version>
 							<configuration>
 								<targetJdk>1.7</targetJdk>
+								<excludeRoots>
+									<excludeRoot>target/generated-sources/xjc</excludeRoot>
+								</excludeRoots>
 							</configuration>
 						</plugin>
 						<plugin>
