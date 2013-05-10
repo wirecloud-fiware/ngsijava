@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<subscribeContextRequest>
+<updateContextSubscriptionRequest>
 	<entityIdList>
 		<entityId type="VendingMachine" isPattern="false">
 			<id>vm1</id>
@@ -13,12 +13,11 @@
 		<attribute>milk_level</attribute>
 		<attribute>status</attribute>
 	</attributeList>
-	<reference>localhost:1028/vm1</reference>
 	<duration>PT24H</duration>
 	<notifyConditions>
 		<notifyCondition>
 			<type>ONCHANGE</type>
 		</notifyCondition>
 	</notifyConditions>
-	<throttling></throttling>
-</subscribeContextRequest>
+	<subscriptionId>SUB_1367852401T001</subscriptionId>
+</updateContextSubscriptionRequest>

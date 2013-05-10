@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<subscribeContextResponse>
+	<subscribeResponse>
+		<subscriptionId>SUB_1367829528T022</subscriptionId>
+		<duration>PT24H</duration>
+		<throttling></throttling>
+	</subscribeResponse>
+</subscribeContextResponse>

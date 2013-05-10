@@ -26,9 +26,13 @@ import com.conwet.samson.jaxb.ContextElementResponse;
 import com.conwet.samson.jaxb.ContextRegistration;
 import com.conwet.samson.jaxb.ContextResponse;
 import com.conwet.samson.jaxb.EntityId;
+import com.conwet.samson.jaxb.NotifyConditionType;
 import com.conwet.samson.jaxb.RegisterContextRequest;
 import com.conwet.samson.jaxb.RegisterContextResponse;
+import com.conwet.samson.jaxb.SubscribeContextRequest;
+import com.conwet.samson.jaxb.SubscribeResponse;
 import com.conwet.samson.jaxb.UpdateContextRequest;
+import com.conwet.samson.jaxb.UpdateContextSubscriptionRequest;
 
 /**
  *
@@ -121,12 +125,15 @@ public class QuerierTest {
 		String type = "MyType";
 		String id = "myID";
 		
-		EntityId entity = instance.newEntityId(type, id);
+		EntityId entity = instance.newEntityId(type, id, false);
 		
 		assertThat(entity.getType()).isEqualTo(type);
 		assertThat(entity.getId()).isEqualTo(id);
 		assertThat(entity.isIsPattern()).isFalse();
-		assertThat(entity).isNotSameAs(instance.newEntityId(type, id));
+		assertThat(entity).isNotSameAs(instance.newEntityId(type, id, false));
+		
+		// check that isPattern is passed correctly
+		assertThat(instance.newEntityId(type, id, true).isIsPattern()).isTrue();
 	}
 	
 	@Test
@@ -135,7 +142,7 @@ public class QuerierTest {
 		loadXML("query.xml", "query-response.xml");
 		String type = "VendingMachine";
 		String id = "ven";
-		EntityId entityID = instance.newEntityId(type, id + "*");
+		EntityId entityID = instance.newEntityId(type, id + ".*", true);
 		
 		// query the service
 		List<ContextElementResponse> response = instance.queryContext(entityID)
@@ -186,6 +193,41 @@ public class QuerierTest {
 		checkServerRequest("/ngsi10/updateContext");		
 	}
 	
+	@Test
+	public void shouldSubscribeContex() throws Exception {
+		
+		loadXML("subscribe.xml", "subscribe-response.xml");
+		
+		SubscribeContextRequest req = unmarshall(SubscribeContextRequest.class);
+		List<EntityId> entityList = req.getEntityIdList().getEntityId();
+		List<String> attrList = req.getAttributeList().getAttribute();
+		NotifyConditionType type = req.getNotifyConditions().getNotifyCondition().get(0).getType();
+		
+		SubscribeResponse resp = instance.subscribe(entityList, attrList,
+									req.getReference(), req.getDuration(), type);
+		assertThat(resp).isNotNull();
+		
+		checkServerRequest("/ngsi10/subscribeContext");
+	}
+	
+	@Test
+	public void shouldUpdateSubscribe() throws Exception {
+		
+		String subID = "SUB_1367852401T001";
+		loadXML("subscribe_update.xml", "subscribe_update-response.xml");
+		
+		UpdateContextSubscriptionRequest req = unmarshall(UpdateContextSubscriptionRequest.class);
+		List<EntityId> entityList = req.getEntityIdList().getEntityId();
+		List<String> attrList = req.getAttributeList().getAttribute();
+		NotifyConditionType type = req.getNotifyConditions().getNotifyCondition().get(0).getType();
+		
+		SubscribeResponse resp = instance.subscribeUpdate(subID, entityList,
+											attrList, req.getDuration(), type);
+		assertThat(resp).isNotNull();
+		
+		checkServerRequest("/ngsi10/updateContextSubscription");
+	}
+		
 	@Test(expected=NullPointerException.class)
 	public void shouldntAcceptNullHost() {
 		

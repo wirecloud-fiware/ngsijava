@@ -37,6 +37,7 @@
 
 package com.conwet.samson;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.ws.rs.core.MediaType;
@@ -45,6 +46,8 @@ import javax.xml.datatype.Duration;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 
+import com.conwet.samson.jaxb.AttributeList;
+import com.conwet.samson.jaxb.BaseContextRequest;
 import com.conwet.samson.jaxb.ContextElement;
 import com.conwet.samson.jaxb.ContextElementList;
 import com.conwet.samson.jaxb.ContextRegistration;
@@ -52,12 +55,19 @@ import com.conwet.samson.jaxb.ContextRegistrationList;
 import com.conwet.samson.jaxb.ContextResponse;
 import com.conwet.samson.jaxb.EntityId;
 import com.conwet.samson.jaxb.EntityIdList;
+import com.conwet.samson.jaxb.NotifyCondition;
+import com.conwet.samson.jaxb.NotifyConditionList;
+import com.conwet.samson.jaxb.NotifyConditionType;
 import com.conwet.samson.jaxb.ObjectFactory;
 import com.conwet.samson.jaxb.QueryContextRequest;
 import com.conwet.samson.jaxb.RegisterContextRequest;
 import com.conwet.samson.jaxb.RegisterContextResponse;
+import com.conwet.samson.jaxb.SubscribeContextRequest;
+import com.conwet.samson.jaxb.SubscribeContextResponse;
+import com.conwet.samson.jaxb.SubscribeResponse;
 import com.conwet.samson.jaxb.UpdateActionType;
 import com.conwet.samson.jaxb.UpdateContextRequest;
+import com.conwet.samson.jaxb.UpdateContextSubscriptionRequest;
 
 /**
  * This class execute queries to Context Broker and unmarshal its XML response
@@ -67,9 +77,18 @@ import com.conwet.samson.jaxb.UpdateContextRequest;
  */
 public class Querier implements QueryBroker {
 	
-	private static final String REGISTER = "/ngsi9/registerContext";
 	private static final String QUERY = "/ngsi10/queryContext";
+	private static final String REGISTER = "/ngsi9/registerContext";
 	private static final String UPDATE = "/ngsi10/updateContext";
+	private static final String SUBSCRIBE = "/ngsi10/subscribeContext";
+	private static final String UNSUBSCRIBE = "/ngsi10/unsubscribeContext";
+	private static final String UPDATE_SUBSCRIBE = "/ngsi10/updateContextSubscription";
+	
+	private static final String DISCOVER_AVAIL = "/ngsi9/discoverContextAvailability";
+	private static final String SUBSCRIBE_AVAIL = "/ngsi9/subscribeContextAvailability";
+	private static final String UNSUBSCRIBE_AVAIL = "/ngsi9/unsubscribeContextAvailability";
+	private static final String UPDATE_AVAIL = "/ngsi9/updateContextAvailabilitySubscription";
+	
 	
 	private String url;
 	private ObjectFactory factory;
@@ -94,13 +113,35 @@ public class Querier implements QueryBroker {
 		this.factory = new ObjectFactory();
 	}
 	
+	/**
+	 * Creates a client request to the host with the given path and data as
+	 * POST content.
+	 * 
+	 * @param path  the path to use for request
+	 * @param data  the POST content
+	 * @param clazz the class type to cast the result
+	 * @return a {@linkplain ContextResponse} containing server's reply
+	 * @throws Exception if some errors occur
+	 */
+	private <T> T response(String path, Object data, Class<T> clazz) throws Exception {
+		
+		ClientRequest req = new ClientRequest(url + path);
+		req.body(MediaType.APPLICATION_XML_TYPE, data);
+		
+		ClientResponse<T> res = req.post(clazz);
+		T response = res.getEntity();
+		res.releaseConnection();
+		
+		return response;
+	}
+	
 	@Override
-	public EntityId newEntityId(String type, String id) {
+	public EntityId newEntityId(String type, String id, boolean isPattern) {
 		
 		EntityId entityID = factory.createEntityId();
 		entityID.setType(type);
 		entityID.setId(id);
-		entityID.setIsPattern(Boolean.FALSE);
+		entityID.setIsPattern(isPattern);
 		
 		return entityID;
 	}
@@ -143,25 +184,58 @@ public class Querier implements QueryBroker {
 		return response(UPDATE, request, ContextResponse.class);
 	}
 	
-	/**
-	 * Creates a client request to the host with the given path and data as
-	 * POST content.
-	 * 
-	 * @param path  the path to use for request
-	 * @param data  the POST content
-	 * @param clazz the class type to cast the result
-	 * @return a {@linkplain ContextResponse} containing server's reply
-	 * @throws Exception if some errors occur
-	 */
-	private <T> T response(String path, Object data, Class<T> clazz) throws Exception {
+	@Override
+	public SubscribeResponse subscribe(List<EntityId> idList, List<String> attrList,
+									String reference, Duration duration,
+									NotifyConditionType type) throws Exception {
 		
-		ClientRequest req = new ClientRequest(url + path);
-		req.body(MediaType.APPLICATION_XML_TYPE, data);
+		SubscribeContextRequest request = factory.createSubscribeContextRequest();
+		request.setReference(reference);
 		
-		ClientResponse<T> res = req.post(clazz);
-		T response = res.getEntity();
-		res.releaseConnection();
+		setSubscriberField(request, idList, attrList, duration, type);
 		
-		return response;
+		return response(SUBSCRIBE, request, SubscribeContextResponse.class).getSubscribeResponse();
+	}
+	
+	@Override
+	public SubscribeResponse subscribeUpdate(String subscriptionID, List<EntityId> idList,
+											List<String> attrList, Duration duration,
+											NotifyConditionType type) throws Exception {
+		
+		UpdateContextSubscriptionRequest request = factory.createUpdateContextSubscriptionRequest();
+		request.setSubscriptionId(Objects.requireNonNull(subscriptionID, "SubscriptionID is null"));
+		
+		setSubscriberField(request, idList, attrList, duration, type);
+		
+		return response(UPDATE_SUBSCRIBE, request, SubscribeContextResponse.class).getSubscribeResponse();
+	}
+	
+	private void setSubscriberField(BaseContextRequest request, List<EntityId> idList,
+									List<String> attrList, Duration duration,
+									NotifyConditionType type) {
+		
+		EntityIdList entityList = factory.createEntityIdList();
+		
+		for (EntityId entityId : idList) {
+			
+			entityList.getEntityId().add(entityId);
+		}
+		
+		AttributeList aList = factory.createAttributeList();
+		
+		for (String attribute : attrList) {
+			
+			aList.getAttribute().add(attribute);
+		}
+		
+		NotifyCondition notifyCond = factory.createNotifyCondition();
+		notifyCond.setType(Objects.requireNonNull(type, "type is null"));
+		NotifyConditionList notList = factory.createNotifyConditionList();
+		notList.getNotifyCondition().add(notifyCond);
+		
+		request.setEntityIdList(entityList);
+		request.setAttributeList(aList);
+		request.setNotifyConditions(notList);
+		request.setDuration(duration);
 	}
 }

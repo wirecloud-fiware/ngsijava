@@ -2,7 +2,6 @@
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" >
 
 	<xs:element name="notifyContextRequest" type="notifyContext" />
-	<xs:element name="subscribeContextRequest" type="subscribeContext" />
 	
 	<xs:element name="queryContextRequest" type="queryContextRequest" />
 	<xs:element name="queryContextResponse" type="contextResponse" />
@@ -12,6 +11,10 @@
 	
 	<xs:element name="updateContextRequest" type="updateContextRequest" />
 	<xs:element name="updateContextResponse" type="contextResponse" />
+	
+	<xs:element name="subscribeContextRequest" type="subscribeContextRequest"/>
+	<xs:element name="updateContextSubscriptionRequest" type="updateContextSubscriptionRequest"/>
+	<xs:element name="subscribeContextResponse" type="subscribeContextResponse"/>
 
 	<!-- Type Definition -->
 	<xs:complexType name="notifyContext">
@@ -119,8 +122,8 @@
 	<xs:complexType name="contextAttribute">
 		<xs:sequence>
 			<xs:element name="name" type="xs:string"/>
-			<xs:element name="type" type="xs:anyURI"/>
-			<xs:element name="contextValue" type="xs:anyType" minOccurs="0"/>
+			<xs:element name="type" type="xs:anyURI" minOccurs="0"/>
+			<xs:element name="contextValue" type="xs:anyType" />
 			<xs:element name="metadata" type="contextMetadata" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 
@@ -154,14 +157,48 @@
 			<xs:element name="details" type="xs:anyType" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
-
-	<xs:complexType name="subscribeContext">
+	
+	<!-- don't use this basic type directly, instead use its subtypes -->
+	<xs:complexType name="BaseContextRequest">
 		<xs:sequence>
 			<xs:element name="entityIdList" type="entityIdList"/>
 			<xs:element name="attributeList" type="attributeList"/>
-			<xs:element name="reference" type="xs:anyURI"/>
 			<xs:element name="duration" type="xs:duration"/>
 			<xs:element name="notifyConditions" type="NotifyConditionList"/>
+			<xs:element name="throttling" type="xs:duration" minOccurs="0" />
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="subscribeContextRequest">
+		<xs:complexContent>
+			<xs:extension base="BaseContextRequest">
+				<xs:sequence>
+					<xs:element name="reference" type="xs:anyURI"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="updateContextSubscriptionRequest">
+		<xs:complexContent>
+			<xs:extension base="BaseContextRequest">
+				<xs:sequence>
+					<xs:element name="subscriptionId" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="subscribeContextResponse">
+		<xs:sequence>
+			<xs:element name="subscribeResponse" type="subscribeResponse"/>
+		</xs:sequence>
+	</xs:complexType>
+		
+	<xs:complexType name="subscribeResponse">
+		<xs:sequence>
+			<xs:element name="subscriptionId" type="xs:string"/>
+			<xs:element name="duration" type="xs:duration"/>
 			<xs:element name="throttling" type="xs:duration" minOccurs="0" />
 		</xs:sequence>
 	</xs:complexType>

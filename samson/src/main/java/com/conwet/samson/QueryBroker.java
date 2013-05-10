@@ -37,13 +37,17 @@
 
 package com.conwet.samson;
 
+import java.util.List;
+
 import javax.xml.datatype.Duration;
 
 import com.conwet.samson.jaxb.ContextElement;
 import com.conwet.samson.jaxb.ContextRegistration;
 import com.conwet.samson.jaxb.ContextResponse;
 import com.conwet.samson.jaxb.EntityId;
+import com.conwet.samson.jaxb.NotifyConditionType;
 import com.conwet.samson.jaxb.RegisterContextResponse;
+import com.conwet.samson.jaxb.SubscribeResponse;
 import com.conwet.samson.jaxb.UpdateActionType;
 
 /**
@@ -57,11 +61,12 @@ public interface QueryBroker {
 	 * Returns a new instance of {@linkplain EntityId} initialized with the
 	 * given values.
 	 * 
-	 * @param type the EntityId type (e.g. VendingMachine) 
-	 * @param id   the EntityID id (e.g. ven*)
+	 * @param type      the EntityId type (e.g. VendingMachine) 
+	 * @param id        the EntityID id (e.g. ven.*)
+	 * @param isPattern true if the id must be use as a pattern, false otherwise
 	 * @return the {@linkplain EntityId} object initialized 
 	 */
-	public EntityId newEntityId(String type, String id);
+	public EntityId newEntityId(String type, String id, boolean isPattern);
 	
 	/**
 	 * Returns the {@linkplain ContextResponse} received from the context
@@ -92,4 +97,34 @@ public interface QueryBroker {
 	 * @throws Exception if some errors occur when decoding the response
 	 */
 	public ContextResponse updateContext(ContextElement cxtElem, UpdateActionType action) throws Exception;
+	
+	/**
+	 * Returns the {@linkplain SubscribeResponse} for the subscription operation.
+	 * 
+	 * @param idList    the list of {@linkplain EntityId} to subscribe to
+	 * @param attrList  the list of attribute to subscribe (empty subscribe to all)
+	 * @param reference the URI to send notifications
+	 * @param duration  the {@linkplain Duration} of subscription
+	 * @param type      the subscription {@linkplain NotifyConditionType}
+	 * @return the {@linkplain SubscribeResponse} received from context broker
+	 * @throws Exception if some errors occur when decoding the response
+	 */
+	public SubscribeResponse subscribe(List<EntityId> idList, List<String> attrList,
+										String reference, Duration duration,
+										NotifyConditionType type) throws Exception;
+	
+	/**
+	 * Returns the {@linkplain SubscribeResponse} for the subscription operation.
+	 * 
+	 * @param subscriptionID the subscriptionID returned from the subscription
+	 * @param idList    the list of {@linkplain EntityId} to update the subscription
+	 * @param attrList  the new list of attribute to subscribe (empty subscribe to all)
+	 * @param duration  the new {@linkplain Duration} of subscription
+	 * @param type      the new subscription {@linkplain NotifyConditionType}
+	 * @return the {@linkplain SubscribeResponse} received from context broker
+	 * @throws Exception if some errors occur when decoding the response
+	 */
+	public SubscribeResponse subscribeUpdate(String subscriptionID, List<EntityId> idList,
+											List<String> attrList, Duration duration,
+											NotifyConditionType type) throws Exception;
 }
