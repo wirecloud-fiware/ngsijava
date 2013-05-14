@@ -46,8 +46,8 @@ import javax.xml.datatype.Duration;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 
-import com.conwet.samson.jaxb.AttributeList;
 import com.conwet.samson.jaxb.BaseContextRequest;
+import com.conwet.samson.jaxb.CondValueList;
 import com.conwet.samson.jaxb.ContextElement;
 import com.conwet.samson.jaxb.ContextElementList;
 import com.conwet.samson.jaxb.ContextRegistration;
@@ -185,14 +185,14 @@ public class Querier implements QueryBroker {
 	}
 	
 	@Override
-	public SubscribeResponse subscribe(List<EntityId> idList, List<String> attrList,
+	public SubscribeResponse subscribe(List<EntityId> idList, List<String> condList,
 									String reference, Duration duration,
 									NotifyConditionType type) throws Exception {
 		
 		SubscribeContextRequest request = factory.createSubscribeContextRequest();
 		request.setReference(reference);
 		
-		setSubscriberField(request, idList, attrList, duration, type);
+		setSubscriberField(request, idList, condList, duration, type);
 		
 		return response(SUBSCRIBE, request, SubscribeContextResponse.class).getSubscribeResponse();
 	}
@@ -211,7 +211,7 @@ public class Querier implements QueryBroker {
 	}
 	
 	private void setSubscriberField(BaseContextRequest request, List<EntityId> idList,
-									List<String> attrList, Duration duration,
+									List<String> condList, Duration duration,
 									NotifyConditionType type) {
 		
 		EntityIdList entityList = factory.createEntityIdList();
@@ -221,20 +221,21 @@ public class Querier implements QueryBroker {
 			entityList.getEntityId().add(entityId);
 		}
 		
-		AttributeList aList = factory.createAttributeList();
+		CondValueList cList = factory.createCondValueList();
 		
-		for (String attribute : attrList) {
+		for (String attribute : condList) {
 			
-			aList.getAttribute().add(attribute);
+			cList.getCondValue().add(attribute);
 		}
 		
 		NotifyCondition notifyCond = factory.createNotifyCondition();
 		notifyCond.setType(Objects.requireNonNull(type, "type is null"));
+		notifyCond.setCondValueList(cList);
 		NotifyConditionList notList = factory.createNotifyConditionList();
 		notList.getNotifyCondition().add(notifyCond);
 		
 		request.setEntityIdList(entityList);
-		request.setAttributeList(aList);
+		request.setAttributeList(factory.createAttributeList());
 		request.setNotifyConditions(notList);
 		request.setDuration(duration);
 	}

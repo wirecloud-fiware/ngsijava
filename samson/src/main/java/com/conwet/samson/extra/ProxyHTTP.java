@@ -110,6 +110,13 @@ public class ProxyHTTP {
 					contentLength = Integer.parseInt(line.split(":")[1].trim());
 				}
 				
+				// set proper WRONG Content-Type
+				
+				if (line.startsWith("Content-Type:")) {
+					
+//					line = "Content-Type: application/x-www-form-urlencoded; charset=utf-8";
+				}
+				
 				output.append(line);
 				output.append("\n");
 				
@@ -126,6 +133,7 @@ public class ProxyHTTP {
 				
 				read += input.read(content, read, contentLength - read);
 			}
+			System.out.println("CONTENT=" + new String(content));
 			output.append(new String(content));
 			output.flush();
 			
@@ -140,7 +148,7 @@ public class ProxyHTTP {
 				
 				if (line.startsWith("Content-Type:")) {
 					// removes double quotes from Content-Type
-					line = line.replace("\"", "");
+//					line = line.replace("\"", "");
 				}
 				
 				output.append(line);

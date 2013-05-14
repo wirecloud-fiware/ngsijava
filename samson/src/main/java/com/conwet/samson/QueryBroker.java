@@ -102,14 +102,14 @@ public interface QueryBroker {
 	 * Returns the {@linkplain SubscribeResponse} for the subscription operation.
 	 * 
 	 * @param idList    the list of {@linkplain EntityId} to subscribe to
-	 * @param attrList  the list of attribute to subscribe (empty subscribe to all)
+	 * @param condList  the list of attribute to subscribe to monitor change
 	 * @param reference the URI to send notifications
 	 * @param duration  the {@linkplain Duration} of subscription
 	 * @param type      the subscription {@linkplain NotifyConditionType}
 	 * @return the {@linkplain SubscribeResponse} received from context broker
 	 * @throws Exception if some errors occur when decoding the response
 	 */
-	public SubscribeResponse subscribe(List<EntityId> idList, List<String> attrList,
+	public SubscribeResponse subscribe(List<EntityId> idList, List<String> condList,
 										String reference, Duration duration,
 										NotifyConditionType type) throws Exception;
 	

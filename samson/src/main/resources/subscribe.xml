@@ -5,18 +5,19 @@
 			<id>vm1</id>
 		</entityId>
 	</entityIdList>
-	<attributeList>
-		<attribute>cash_available</attribute>
-		<attribute>coffee_level</attribute>
-		<attribute>latitude</attribute>
-		<attribute>longitude</attribute>
-		<attribute>milk_level</attribute>
-		<attribute>status</attribute>
-	</attributeList>
+	<attributeList/>
 	<duration>PT24H</duration>
 	<notifyConditions>
 		<notifyCondition>
 			<type>ONCHANGE</type>
+			<condValueList>
+				<condValue>cash_available</condValue>
+				<condValue>coffee_level</condValue>
+				<condValue>latitude</condValue>
+				<condValue>longitude</condValue>
+				<condValue>milk_level</condValue>
+				<condValue>status</condValue>
+			</condValueList>
 		</notifyCondition>
 	</notifyConditions>
 	<reference>localhost:1028/vm1</reference>

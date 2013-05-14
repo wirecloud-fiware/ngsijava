@@ -26,7 +26,7 @@ import com.conwet.samson.jaxb.ContextElementResponse;
 import com.conwet.samson.jaxb.ContextRegistration;
 import com.conwet.samson.jaxb.ContextResponse;
 import com.conwet.samson.jaxb.EntityId;
-import com.conwet.samson.jaxb.NotifyConditionType;
+import com.conwet.samson.jaxb.NotifyCondition;
 import com.conwet.samson.jaxb.RegisterContextRequest;
 import com.conwet.samson.jaxb.RegisterContextResponse;
 import com.conwet.samson.jaxb.SubscribeContextRequest;
@@ -200,11 +200,11 @@ public class QuerierTest {
 		
 		SubscribeContextRequest req = unmarshall(SubscribeContextRequest.class);
 		List<EntityId> entityList = req.getEntityIdList().getEntityId();
-		List<String> attrList = req.getAttributeList().getAttribute();
-		NotifyConditionType type = req.getNotifyConditions().getNotifyCondition().get(0).getType();
+		NotifyCondition cond = req.getNotifyConditions().getNotifyCondition().get(0);
+		List<String> condList = cond.getCondValueList().getCondValue();
 		
-		SubscribeResponse resp = instance.subscribe(entityList, attrList,
-									req.getReference(), req.getDuration(), type);
+		SubscribeResponse resp = instance.subscribe(entityList, condList,
+									req.getReference(), req.getDuration(), cond.getType());
 		assertThat(resp).isNotNull();
 		
 		checkServerRequest("/ngsi10/subscribeContext");
@@ -218,11 +218,11 @@ public class QuerierTest {
 		
 		UpdateContextSubscriptionRequest req = unmarshall(UpdateContextSubscriptionRequest.class);
 		List<EntityId> entityList = req.getEntityIdList().getEntityId();
-		List<String> attrList = req.getAttributeList().getAttribute();
-		NotifyConditionType type = req.getNotifyConditions().getNotifyCondition().get(0).getType();
+		NotifyCondition cond = req.getNotifyConditions().getNotifyCondition().get(0);
+		List<String> condList = cond.getCondValueList().getCondValue();
 		
 		SubscribeResponse resp = instance.subscribeUpdate(subID, entityList,
-											attrList, req.getDuration(), type);
+											condList, req.getDuration(), cond.getType());
 		assertThat(resp).isNotNull();
 		
 		checkServerRequest("/ngsi10/updateContextSubscription");

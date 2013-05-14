@@ -17,7 +17,6 @@
 						<metadata>
 						</metadata>
 					</contextAttribute>
-
 					<contextAttribute>
 						<name>coffe_level</name>
 						<type>percentage</type>
@@ -28,7 +27,6 @@
 							<value>DDDD</value>
 						</metadata>
 					</contextAttribute>
-
 				</contextAttributeList>
 				<domainMetadata>
 				</domainMetadata>
