@@ -16,7 +16,7 @@ Compilation
 -----------
 
     $ cd samson
-    $ maven install
+    $ mvn install
 
 Created artifacts
 -----------------
