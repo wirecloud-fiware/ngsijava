@@ -15,8 +15,8 @@ Requirements
 Compilation
 -----------
 
-  $ cd samson
-  $ maven install
+    $ cd samson
+    $ maven install
 
 Created artifacts
 -----------------
