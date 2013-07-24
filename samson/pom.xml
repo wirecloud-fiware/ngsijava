@@ -81,7 +81,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- generate JAXB classes -->
 			<plugin>
 				<groupId>org.jvnet.jaxb2.maven2</groupId>
@@ -112,7 +112,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- to create the bundle -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -133,7 +133,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -202,7 +202,7 @@
 			<plugin>
 				<groupId>org.pitest</groupId>
 				<artifactId>pitest-maven</artifactId>
-				<version>0.29</version>
+				<version>0.30</version>
 				<configuration>
 					<targetClasses>
 						<param>com.conwet.*</param>
@@ -220,7 +220,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.6.2.201302030002</version>
+				<version>0.6.3.201306030806</version>
 				<configuration>
 					<excludes>
 						<exclude>com/conwet/samson/jaxb/**</exclude>
@@ -251,20 +251,31 @@
 			<artifactId>jaxb2-basics-runtime</artifactId>
 			<version>${jaxb-basic.version}</version>
 		</dependency>
-		
+
 		<!-- REST library -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jaxrs</artifactId>
-			<version>2.3.5.Final</version>
+			<version>${resteasy.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
-		<dependency>  
-            <groupId>org.jboss.resteasy</groupId>  
-            <artifactId>resteasy-jaxb-provider</artifactId>  
-            <version>2.3.5.Final</version>
-            <scope>runtime</scope>  
-        </dependency> 
-		
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+			<version>${resteasy.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+			<version>${resteasy.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- unit testing -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -285,11 +296,12 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<surefire-failsafe.version>2.14</surefire-failsafe.version>
+		<surefire-failsafe.version>2.15</surefire-failsafe.version>
 		<jaxb-basic.version>0.6.4</jaxb-basic.version>
+		<resteasy.version>3.0.2.Final</resteasy.version>
 	</properties>
 </project>

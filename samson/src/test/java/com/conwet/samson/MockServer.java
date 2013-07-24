@@ -77,7 +77,9 @@ public class MockServer implements Runnable {
 				request = sb.toString();
 				
 				// send the response
-				writer.append("HTTP/1.1 200 OK\n\n"); // HTTP header
+				writer.append("HTTP/1.1 200 OK\n"); // HTTP header
+				writer.append("Content-Type: application/xml; charset=UTF-8\n");
+				writer.append("\n");
 				writer.append(reply);
 				writer.close();
 				reader.close();

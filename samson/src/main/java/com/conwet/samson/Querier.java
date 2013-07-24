@@ -21,11 +21,11 @@ package com.conwet.samson;
 import java.util.List;
 import java.util.Objects;
 
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.xml.datatype.Duration;
-
-import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.client.ClientResponse;
 
 import com.conwet.samson.jaxb.BaseContextRequest;
 import com.conwet.samson.jaxb.CondValueList;
@@ -104,14 +104,11 @@ public class Querier implements QueryBroker {
 	 * @return a {@linkplain ContextResponse} containing server's reply
 	 * @throws Exception if some errors occur
 	 */
-	private <T> T response(String path, Object data, Class<T> clazz) throws Exception {
+	private <E, T> T response(String path, E data, Class<T> clazz) throws Exception {
 		
-		ClientRequest req = new ClientRequest(url + path);
-		req.body(MediaType.APPLICATION_XML_TYPE, data);
-		
-		ClientResponse<T> res = req.post(clazz);
-		T response = res.getEntity();
-		res.releaseConnection();
+		WebTarget target = ClientBuilder.newClient().target(url).path(path);
+		T response = target.request(MediaType.APPLICATION_XML)
+							.post(Entity.xml(data), clazz);
 		
 		return response;
 	}

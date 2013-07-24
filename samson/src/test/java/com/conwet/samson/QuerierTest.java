@@ -228,18 +228,21 @@ public class QuerierTest {
 		checkServerRequest("/ngsi10/updateContextSubscription");
 	}
 		
+	@SuppressWarnings("unused")
 	@Test(expected=NullPointerException.class)
 	public void shouldntAcceptNullHost() {
 		
 		new Querier(null, 22);
 	}
 	
+	@SuppressWarnings("unused")
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldntAcceptZeroPort() {
 		
 		new Querier("localhost", 0);
 	}
 	
+	@SuppressWarnings("unused")
 	@Test(expected=IllegalArgumentException.class)
 	public void shouldntAcceptNegativePort() {
 		
