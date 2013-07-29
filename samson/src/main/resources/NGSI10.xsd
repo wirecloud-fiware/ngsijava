@@ -13,8 +13,9 @@
 	<xs:element name="updateContextResponse" type="contextResponse" />
 	
 	<xs:element name="subscribeContextRequest" type="subscribeContextRequest"/>
-	<xs:element name="updateContextSubscriptionRequest" type="updateContextSubscriptionRequest"/>
 	<xs:element name="subscribeContextResponse" type="subscribeContextResponse"/>
+	<xs:element name="updateContextSubscriptionRequest" type="updateContextSubscriptionRequest"/>
+	<xs:element name="updateContextSubscriptionResponse" type="updateContextSubscriptionResponse"/>
 
 	<!-- Type Definition -->
 	<xs:complexType name="notifyContext">
@@ -27,8 +28,8 @@
 	
 	<xs:complexType name="registerContextResponse">
 		<xs:sequence>
-			<xs:element name="duration" type="xs:duration"/>
 			<xs:element name="registrationId" type="xs:string"/>
+			<xs:element name="duration" type="xs:duration"/>
 		</xs:sequence>
 	</xs:complexType>
 	
@@ -187,6 +188,12 @@
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="updateContextSubscriptionResponse">
+		<xs:sequence>
+			<xs:element name="subscribeResponse" type="subscribeResponse"/>
+		</xs:sequence>
 	</xs:complexType>
 	
 	<xs:complexType name="subscribeContextResponse">

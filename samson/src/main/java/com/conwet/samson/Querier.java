@@ -49,6 +49,7 @@ import com.conwet.samson.jaxb.SubscribeResponse;
 import com.conwet.samson.jaxb.UpdateActionType;
 import com.conwet.samson.jaxb.UpdateContextRequest;
 import com.conwet.samson.jaxb.UpdateContextSubscriptionRequest;
+import com.conwet.samson.jaxb.UpdateContextSubscriptionResponse;
 
 /**
  * This class execute queries to Context Broker and unmarshal its XML response
@@ -184,8 +185,8 @@ public class Querier implements QueryBroker {
 		request.setSubscriptionId(Objects.requireNonNull(subscriptionID, "SubscriptionID is null"));
 		
 		setSubscriberField(request, idList, attrList, duration, type);
-		
-		return response(UPDATE_SUBSCRIBE, request, SubscribeContextResponse.class).getSubscribeResponse();
+		return response(UPDATE_SUBSCRIBE, request, UpdateContextSubscriptionResponse.class)
+														.getSubscribeResponse();
 	}
 	
 	private void setSubscriberField(BaseContextRequest request, List<EntityId> idList,
