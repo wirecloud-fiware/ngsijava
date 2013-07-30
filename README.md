@@ -2,6 +2,7 @@ ngsijava
 ========
 
 This repository houses the Java library used for implementing NGSI clients mainly for FI-WARE's demos.
+The library has been tested to work against Context Broker 0.6.0 codename Orion.
 
 How to compile
 ==============
